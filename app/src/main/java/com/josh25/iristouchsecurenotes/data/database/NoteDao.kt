@@ -1,4 +1,4 @@
-package com.josh25.iristouchsecurenotes.data
+package com.josh25.iristouchsecurenotes.data.database
 
 import androidx.room.Dao
 import androidx.room.Delete

@@ -2,9 +2,8 @@ package com.josh25.iristouchsecurenotes.di
 
 import android.content.Context
 import androidx.room.Room
-import com.josh25.iristouchsecurenotes.data.NoteDao
-import com.josh25.iristouchsecurenotes.data.NoteDatabase
-import com.josh25.iristouchsecurenotes.data.NoteRepository
+import com.josh25.iristouchsecurenotes.data.database.NoteDao
+import com.josh25.iristouchsecurenotes.data.database.NoteDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

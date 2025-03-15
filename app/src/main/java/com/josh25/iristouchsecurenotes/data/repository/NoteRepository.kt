@@ -1,5 +1,7 @@
-package com.josh25.iristouchsecurenotes.data
+package com.josh25.iristouchsecurenotes.data.repository
 
+import com.josh25.iristouchsecurenotes.data.database.NoteDao
+import com.josh25.iristouchsecurenotes.data.database.NoteEntity
 import com.josh25.iristouchsecurenotes.ui.theme.NoteModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

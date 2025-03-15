@@ -1,4 +1,4 @@
-package com.josh25.iristouchsecurenotes.data
+package com.josh25.iristouchsecurenotes.data.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
