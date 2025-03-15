@@ -12,16 +12,16 @@ import javax.inject.Singleton
 class NoteRepository @Inject constructor(private val noteDao: NoteDao){
 
     // Mapper: transforms of an object from one Layer, adapted to a different Layer
-    // TaskModel  <-- Mapper <-- TakEntity
+    // NoteModel  <-- Mapper <-- NoteEntity
 
-    val tasks: Flow<List<NoteModel>> =
-        noteDao.getTasks().map { items -> items.map { NoteModel(it.id, it.note, it.voiceNotePath) } }
+    val notes: Flow<List<NoteModel>> =
+        noteDao.getNotes().map { items -> items.map { NoteModel(it.id, it.note, it.voiceNotePath) } }
 
-    suspend fun add(noteModel: NoteModel) {
+    suspend fun addNote(noteModel: NoteModel) {
         noteDao.addNote(noteModel.toEntity())
     }
 
-    suspend fun updateTask(noteModel: NoteModel) {
+    suspend fun updateNote(noteModel: NoteModel) {
         noteDao.updateNote(noteModel.toEntity())
     }
 

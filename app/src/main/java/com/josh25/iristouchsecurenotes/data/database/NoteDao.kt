@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 interface NoteDao {
 
     @Query("SELECT * from NoteEntity")
-    fun getTasks(): Flow<List<NoteEntity>>
+    fun getNotes(): Flow<List<NoteEntity>>
 
     @Insert
     suspend fun addNote(item: NoteEntity)

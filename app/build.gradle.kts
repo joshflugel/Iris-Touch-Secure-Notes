@@ -77,6 +77,7 @@ dependencies {
 
     // Hilt dependency injection
     implementation(libs.hilt)
+    implementation(libs.androidx.hilt.navigation.compose)
     ksp(libs.hiltCompiler)
 
     // Room for database

@@ -20,8 +20,10 @@ import androidx.fragment.app.FragmentActivity
 import com.josh25.iristouchsecurenotes.presentation.screens.LoginScreen
 import com.josh25.iristouchsecurenotes.presentation.screens.NotesScreen
 import com.josh25.iristouchsecurenotes.ui.theme.IrisTouchSecureNotesTheme
+import dagger.hilt.android.AndroidEntryPoint
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@AndroidEntryPoint
 class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

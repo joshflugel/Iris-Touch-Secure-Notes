@@ -5,13 +5,20 @@ import androidx.activity.ComponentActivity
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.concurrent.Executor
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class BiometricAuthManager(private val context: Context) {
+@Singleton
+class BiometricAuthManager @Inject constructor(
+    @ApplicationContext private val context: Context
+) {
 
     private val executor: Executor = ContextCompat.getMainExecutor(context)
 
     fun createBiometricPrompt(
+        activity: FragmentActivity,
         onSuccess: () -> Unit,
         onFailure: () -> Unit,
         onError: (String) -> Unit
@@ -33,7 +40,7 @@ class BiometricAuthManager(private val context: Context) {
             }
         }
 
-        val activity = context as? FragmentActivity
+       // val activity = context as? FragmentActivity
             ?: throw IllegalArgumentException("Context must be a FragmentActivity")
 
         return BiometricPrompt(activity, executor, callback)
