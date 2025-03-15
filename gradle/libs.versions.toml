@@ -48,6 +48,8 @@ composeMaterial = { group = "androidx.compose.material3", name = "material3" }
 composeTooling = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 composeToolingDebug = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -55,5 +57,4 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
-
-
+androidx-room = { id = "androidx.room", version.ref = "room"}

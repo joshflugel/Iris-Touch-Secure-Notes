@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.androidx.room)
 }
 
 android {
@@ -38,6 +39,11 @@ android {
     }
     buildFeatures {
         compose = true
+    }
+
+    room { schemaDirectory("schemas") }
+    hilt {
+        enableAggregatingTask = false
     }
 }
 
@@ -75,6 +81,7 @@ dependencies {
 
     // Room for database
     implementation(libs.roomRuntime)
+    implementation(libs.room.ktx)
     ksp(libs.roomCompiler)
 
     // Biometric authentication
