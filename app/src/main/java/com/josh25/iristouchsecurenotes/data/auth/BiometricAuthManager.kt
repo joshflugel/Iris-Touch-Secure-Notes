@@ -1,7 +1,6 @@
 package com.josh25.iristouchsecurenotes.data.auth
 
 import android.content.Context
-import androidx.activity.ComponentActivity
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
@@ -40,9 +39,6 @@ class BiometricAuthManager @Inject constructor(
             }
         }
 
-       // val activity = context as? FragmentActivity
-            ?: throw IllegalArgumentException("Context must be a FragmentActivity")
-
         return BiometricPrompt(activity, executor, callback)
     }
 
@@ -54,4 +50,3 @@ class BiometricAuthManager @Inject constructor(
             .build()
     }
 }
-
