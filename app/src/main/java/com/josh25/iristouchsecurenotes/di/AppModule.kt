@@ -31,12 +31,4 @@ object AppModule {
         return database.noteDao()
     }
 
-    /*
-    @Provides
-    @Singleton
-    fun provideNoteRepository(noteDao: NoteDao): NoteRepository {
-        return NoteRepository(noteDao)
-    }
-
-     */
 }

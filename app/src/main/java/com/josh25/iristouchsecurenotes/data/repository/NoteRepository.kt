@@ -1,35 +1,65 @@
 package com.josh25.iristouchsecurenotes.data.repository
 
+import android.util.Log
+import com.josh25.iristouchsecurenotes.ui.theme.toEntity
 import com.josh25.iristouchsecurenotes.data.database.NoteDao
 import com.josh25.iristouchsecurenotes.data.database.NoteEntity
+import com.josh25.iristouchsecurenotes.data.encryption.EncryptionUtils
 import com.josh25.iristouchsecurenotes.ui.theme.NoteModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class NoteRepository @Inject constructor(private val noteDao: NoteDao){
+class NoteRepository @Inject constructor(private val noteDao: NoteDao) {
 
-    // Mapper: transforms of an object from one Layer, adapted to a different Layer
-    // NoteModel  <-- Mapper <-- NoteEntity
+    private val _notes = MutableStateFlow<List<NoteModel>>(emptyList())
 
-    val notes: Flow<List<NoteModel>> =
-        noteDao.getNotes().map { items -> items.map { NoteModel(it.id, it.note, it.voiceNotePath) } }
+    fun observeDecryptedNotes(): Flow<List<NoteModel>> {
+        return noteDao.getNotes() // Assuming getNotes() is a Flow from the DAO
+            .map { items ->
+                items.map {
+                    val decryptedNote = EncryptionUtils.decryptData(it.note, it.iv ?: "")
+                    NoteModel(
+                        it.id,
+                        decryptedNote
+                    )
+                }
+            }
+    }
 
     suspend fun addNote(noteModel: NoteModel) {
-        noteDao.addNote(noteModel.toEntity())
+        val (encryptedData, iv) = EncryptionUtils.encryptData(noteModel.note)
+        Log.e("joshtag", "Adding note: EncryptedData: $encryptedData, IV: $iv")
+        noteDao.addNote(
+            NoteEntity(
+                noteModel.id,
+                encryptedData,
+                iv // Input Vector
+            )
+        )
     }
 
     suspend fun updateNote(noteModel: NoteModel) {
-        noteDao.updateNote(noteModel.toEntity())
+        val (encryptedData, iv) = EncryptionUtils.encryptData(noteModel.note)
+        noteDao.updateNote(
+            NoteEntity(
+                noteModel.id,
+                encryptedData,
+                iv
+            )
+        )
     }
 
     suspend fun deleteNote(noteModel: NoteModel) {
         noteDao.deleteNote(noteModel.toEntity())
     }
-}
-
-fun NoteModel.toEntity(): NoteEntity {
-    return NoteEntity(this.id, this.note, this.voiceNotePath)
 }

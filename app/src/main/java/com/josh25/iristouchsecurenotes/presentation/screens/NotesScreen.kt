@@ -1,55 +1,121 @@
 package com.josh25.iristouchsecurenotes.presentation.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.josh25.iristouchsecurenotes.R
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.josh25.iristouchsecurenotes.presentation.viewmodel.NotesViewModel
+import com.josh25.iristouchsecurenotes.ui.theme.NoteModel
 
-@Preview
 @Composable
 fun NotesScreen() {
-    Box(Modifier.fillMaxSize()) {
-        // Background Image
-        Image(
-            painter = painterResource(id = R.drawable.finger2),
-            contentDescription = "Background Image",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
-        )
 
-        // Centered Row with no rounded corners
+    val viewModel: NotesViewModel = hiltViewModel()
+    val notes by viewModel.notes.collectAsState()
+    val showDialog by viewModel.showDialog.collectAsState()
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        AddNoteDialog(showDialog, onDismiss = { viewModel.onDialogClose() }, onNoteAdded = { viewModel.onNoteCreated(it) })
+        FabDialog(Modifier.align(Alignment.BottomEnd), viewModel)
+        NotesList(notes, viewModel)
+    }
+}
+
+@Composable
+fun NotesList(notes: List<NoteModel>, viewModel: NotesViewModel) {
+    LazyColumn {
+        items(notes, key = { it.id }) { note ->
+            NoteItem(note, viewModel)
+        }
+    }
+}
+
+@Composable
+fun NoteItem(noteModel: NoteModel, viewModel: NotesViewModel) {
+    Card(
+        Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .pointerInput(Unit) {
+                detectTapGestures(onLongPress = { viewModel.onNoteDeleted(noteModel) })
+            },
+        elevation = CardDefaults.cardElevation(8.dp)
+    ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth() // Ensure the Row spans the entire width
-            //    .padding(16.dp) // Add padding inside the Row
-                .background(Color(0xB0000000)) // Semi-transparent dark gray background
-                .align(Alignment.Center), // Align Row in the center of the screen
-            horizontalArrangement = Arrangement.Center // Center the content horizontally inside the Row
+            modifier = Modifier.fillMaxWidth().padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = "WELCOME",
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(16.dp)
+            Text(noteModel.note, modifier = Modifier.weight(1f))
+        }
+    }
+}
 
-            )
+@Composable
+fun FabDialog(modifier: Modifier, viewModel: NotesViewModel) {
+    FloatingActionButton(onClick = { viewModel.onShowDialogClick() }, modifier = modifier.padding(16.dp)) {
+        Icon(Icons.Filled.Add, contentDescription = "Add Note")
+    }
+}
+
+@Composable
+fun AddNoteDialog(show: Boolean, onDismiss: () -> Unit, onNoteAdded: (String) -> Unit) {
+    var noteContent by rememberSaveable { mutableStateOf("") }
+    if (show) {
+        Dialog(onDismissRequest = onDismiss) {
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .background(Color.White)
+                    .padding(16.dp)
+            ) {
+                Text(
+                    "Add Note",
+                    fontSize = 16.sp,
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+                Spacer(modifier = Modifier.size(16.dp))
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = noteContent,
+                    onValueChange = { noteContent = it },
+                    singleLine = true
+                )
+                Spacer(modifier = Modifier.size(16.dp))
+                Button(
+                    onClick = {
+                        onNoteAdded(noteContent)
+                        noteContent = ""
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Add Note")
+                }
+            }
         }
     }
 }

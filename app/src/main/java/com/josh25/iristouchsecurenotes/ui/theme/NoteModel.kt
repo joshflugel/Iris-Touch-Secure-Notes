@@ -1,7 +1,13 @@
 package com.josh25.iristouchsecurenotes.ui.theme
 
+import com.josh25.iristouchsecurenotes.data.database.NoteEntity
+import java.util.UUID
+
 data class NoteModel(
-    val id: Int = System.currentTimeMillis().hashCode(),
+    val id: String = UUID.randomUUID().toString(),
     val note: String,
-    val voiceNotePath: String? = null
 )
+
+fun NoteModel.toEntity(): NoteEntity {
+    return NoteEntity(this.id, this.note, null)
+}
