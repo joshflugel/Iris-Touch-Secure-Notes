@@ -16,6 +16,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.fragment.app.FragmentActivity
 import com.josh25.iristouchsecurenotes.R
 import com.josh25.iristouchsecurenotes.presentation.viewmodel.AuthViewModel
+import com.josh25.iristouchsecurenotes.ui.theme.JoshGray
 
 @SuppressLint("ContextCastToActivity")
 @Composable
@@ -33,7 +34,7 @@ fun LoginScreen(
     }
 
     Image(
-        painter = painterResource(id = R.drawable.finger2),
+        painter = painterResource(id = R.drawable.iris1b),
         "Background Image",
         contentScale = ContentScale.Crop,
         modifier = Modifier.fillMaxSize()
@@ -47,9 +48,9 @@ fun LoginScreen(
         Button(
             onClick = { viewModel.authenticate(context) },
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xB0000000),
+                containerColor = JoshGray,
                 contentColor = Color.White
-        ),) {
+        )) {
             Text("UNLOCK", color = Color.White)
         }
     }

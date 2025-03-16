@@ -1,5 +1,6 @@
 package com.josh25.iristouchsecurenotes.presentation.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,10 +25,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.josh25.iristouchsecurenotes.R
 import com.josh25.iristouchsecurenotes.presentation.viewmodel.NotesViewModel
+import com.josh25.iristouchsecurenotes.ui.theme.JoshGray
 import com.josh25.iristouchsecurenotes.ui.theme.NoteModel
 
 @Composable
@@ -38,6 +43,12 @@ fun NotesScreen() {
     val showDialog by viewModel.showDialog.collectAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {
+        Image(
+            painter = painterResource(id = R.drawable.finger2),
+            "Background Image",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
         AddNoteDialog(showDialog, onDismiss = { viewModel.onDialogClose() }, onNoteAdded = { viewModel.onNoteCreated(it) })
         FabDialog(Modifier.align(Alignment.BottomEnd), viewModel)
         NotesList(notes, viewModel)
@@ -58,14 +69,20 @@ fun NoteItem(noteModel: NoteModel, viewModel: NotesViewModel) {
     Card(
         Modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            .padding(4.dp)
             .pointerInput(Unit) {
                 detectTapGestures(onLongPress = { viewModel.onNoteDeleted(noteModel) })
             },
-        elevation = CardDefaults.cardElevation(8.dp)
+        //elevation = CardDefaults.cardElevation(4.dp),
+        colors = CardColors(
+            containerColor = JoshGray,
+            contentColor = Color.White,
+            disabledContainerColor = JoshGray,
+            disabledContentColor = Color.White
+        )
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(8.dp),
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(noteModel.note, modifier = Modifier.weight(1f))
@@ -88,13 +105,13 @@ fun AddNoteDialog(show: Boolean, onDismiss: () -> Unit, onNoteAdded: (String) ->
             Column(
                 Modifier
                     .fillMaxWidth()
-                    .background(Color.White)
+                    .background(JoshGray)
                     .padding(16.dp)
             ) {
                 Text(
                     "Add Note",
                     fontSize = 16.sp,
-                    color = Color.Black,
+                    color = Color.White,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
@@ -111,8 +128,11 @@ fun AddNoteDialog(show: Boolean, onDismiss: () -> Unit, onNoteAdded: (String) ->
                         onNoteAdded(noteContent)
                         noteContent = ""
                     },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Gray,
+                        contentColor = Color.White)
+                    ) {
                     Text("Add Note")
                 }
             }
