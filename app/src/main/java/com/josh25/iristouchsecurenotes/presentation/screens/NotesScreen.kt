@@ -26,6 +26,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -107,6 +108,7 @@ fun AddNoteDialog(show: Boolean, onDismiss: () -> Unit, onNoteAdded: (String) ->
                     .fillMaxWidth()
                     .background(JoshGray)
                     .padding(16.dp)
+                    .testTag("dialog")
             ) {
                 Text(
                     "Add Note",

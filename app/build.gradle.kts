@@ -73,7 +73,6 @@ dependencies {
 
     // Lifecycle and ViewModel for Compose
     implementation(libs.lifecycleViewModel)
-    //implementation(libs.lifecycleRuntime)
 
     // Hilt dependency injection
     implementation(libs.hilt)
@@ -94,4 +93,8 @@ dependencies {
     // Coroutine dependencies (StateFlow)
     implementation(libs.coroutinesCore)
     implementation(libs.coroutinesAndroid)
+
+    // UI Testing
+    androidTestImplementation(libs.ui.test.junit4)
+    debugImplementation(libs.ui.test.manifest)
 }
